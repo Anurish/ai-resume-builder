@@ -1,3 +1,5 @@
+export const runtime = "nodejs";
+
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { cookies } from "next/headers";
@@ -34,15 +36,12 @@ export async function GET() {
     }
   }
 
-  // ❌ No auth
   if (!email) {
     return NextResponse.json({ success: false });
   }
 
-  // 3️⃣ Fetch user
   const user = await User.findOne({ email }).lean();
 
-  // ❌ No resume saved yet
   if (
     !user ||
     !user.resumeData ||
@@ -51,7 +50,6 @@ export async function GET() {
     return NextResponse.json({ success: false });
   }
 
-  // ✅ Valid resume exists
   return NextResponse.json({
     success: true,
     resumeData: user.resumeData,

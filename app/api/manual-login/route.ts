@@ -2,7 +2,9 @@ import { NextResponse } from "next/server";
 import { connectToDB } from "@/lib/mongodb";
 import User from "@/models/User";
 import bcrypt from "bcryptjs";
+
 import jwt from "jsonwebtoken";
+
 
 export async function POST(req: Request) {
   await connectToDB();

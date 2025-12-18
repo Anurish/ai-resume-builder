@@ -1,0 +1,36 @@
+/* Print PDF layout — A4 centered */
+@media print {
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* hide UI */
+  #resume-form, #header-ui, button, input, textarea, nav {
+    display: none !important;
+  }
+
+  /* resume wrapper */
+  .resume-container {
+    width: 210mm;
+    min-height: 297mm;
+    max-height: 297mm;
+    margin: 0 auto;
+    overflow: hidden;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+  }
+
+  /* prevent page cutoff inside sections */
+  .resume-section {
+    page-break-inside: avoid;
+  }
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}

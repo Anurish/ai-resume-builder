@@ -1,0 +1,31 @@
+/* Disable LAB colors for Tailwind — required for html2canvas */
+:root {
+  --tw-color-accent: rgb(0 0 0);
+  --tw-color: rgb(0 0 0);
+  color-scheme: light;
+}
+
+
+:root { --tw-color-space: rgb; }
+
+html, body {
+  color-scheme: light;
+}
+
+
+@media print {
+  .page-break {
+    page-break-before: always !important;
+  }
+  .avoid-break {
+    page-break-inside: avoid !important;
+  }
+}
+
+
+/* Force Tailwind to generate RGB values, not LAB */
+*, ::before, ::after {
+    --tw-shadow-color: rgb(0 0 0);
+    --tw-ring-color: rgb(0 0 0);
+    --tw-border-opacity: 1;
+}

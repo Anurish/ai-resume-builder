@@ -29,6 +29,15 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    return NextResponse.json({ success: false, error: error.message });
-  }
+  const message =
+    error instanceof Error ? error.message : "Internal Server Error";
+
+  console.error("SAVE RESUME ERROR:", error);
+
+  return NextResponse.json(
+    { success: false, error: message },
+    { status: 500 }
+  );
+}
+
 }

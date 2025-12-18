@@ -1,8 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
-    turbo: false,
-  },
+    serverExternalPackages: [
+      "bcryptjs",
+      "jsonwebtoken",
+      "mongoose"
+    ]
+  }
 };
 
 export default nextConfig;

@@ -7,7 +7,8 @@ import bcrypt from "bcryptjs";
 
 import { randomBytes } from "crypto";
 
-export async function POST(req) {
+export async function POST(req: Request) {
+
   try {
     await connectToDB();
 

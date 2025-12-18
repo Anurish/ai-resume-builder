@@ -1,11 +1,10 @@
-import mongoose from "mongoose";
+import mongoose, { InferSchemaType } from "mongoose";
 
 const UserSchema = new mongoose.Schema(
   {
     name: String,
     email: { type: String, unique: true, required: true },
-    password: { type: String, required: true },   // <-- IMPORTANT FIX
-
+    password: { type: String, required: true },
     image: String,
     publicId: { type: String, default: null },
 
@@ -19,9 +18,13 @@ const UserSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+// ✅ This line is the key
+export type UserDocument = InferSchemaType<typeof UserSchema>;
+
 UserSchema.index(
   { publicId: 1 },
   { unique: true, partialFilterExpression: { publicId: { $type: "string" } } }
 );
 
-export default mongoose.models.User || mongoose.model("User", UserSchema);
+export default mongoose.models.User ||
+  mongoose.model("User", UserSchema);

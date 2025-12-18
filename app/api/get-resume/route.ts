@@ -6,6 +6,7 @@ import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
 import { connectToDB } from "@/lib/mongodb";
 import User from "@/models/User";
+import type { UserDocument } from "@/models/User";
 
 export async function GET() {
   await connectToDB();
@@ -41,15 +42,17 @@ const manualToken = cookieStore.get("manual_token")?.value;
     return NextResponse.json({ success: false });
   }
 
-  const user = await User.findOne({ email }).lean();
+  
 
-  if (
-    !user ||
-    !user.resumeData ||
-    Object.values(user.resumeData).every(v => !v)
-  ) {
-    return NextResponse.json({ success: false });
-  }
+const user = await User.findOne({ email }).lean<UserDocument>();
+
+ if (
+  !user ||
+  !user.resumeData ||
+  Object.values(user.resumeData).every(v => !v)
+) {
+  return NextResponse.json({ success: false });
+}
 
   return NextResponse.json({
     success: true,

@@ -1,12 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
+    turbo: false,   // ⬅️ FORCE WEBPACK
     serverExternalPackages: [
       "bcryptjs",
       "jsonwebtoken",
-      "mongoose"
-    ]
-  }
+      "mongoose",
+    ],
+  },
 };
 
 export default nextConfig;

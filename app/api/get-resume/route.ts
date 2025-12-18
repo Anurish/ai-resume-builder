@@ -20,8 +20,9 @@ export async function GET() {
 
   // 2️⃣ MANUAL LOGIN (JWT cookie)
   if (!email) {
-    const cookieStore = cookies();
-    const manualToken = cookieStore.get("manual_token")?.value;
+   const cookieStore = await cookies();
+const manualToken = cookieStore.get("manual_token")?.value;
+
 
     if (manualToken) {
       try {

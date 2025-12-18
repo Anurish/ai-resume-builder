@@ -1,23 +1,12 @@
-export const runtime = "nodejs";
-
-import NextAuth from "next-auth";
-import { authOptions } from "@/lib/auth-options";
-
-const handler = NextAuth(authOptions);
-
-export { handler as GET, handler as POST };
-
-
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
-
-
+import { nanoid } from "nanoid";
 import { connectToDB } from "@/lib/mongodb";
 import User from "@/models/User";
-import { nanoid } from "nanoid";
+import { NextAuthOptions } from "next-auth";
 
-export const authOptions = {
+export const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -33,10 +22,13 @@ export const authOptions = {
       async authorize(credentials) {
         await connectToDB();
 
-        const user = await User.findOne({ email: credentials.email });
+        const user = await User.findOne({ email: credentials!.email });
         if (!user) return null;
 
-        const isMatch = await bcrypt.compare(credentials.password, user.password);
+        const isMatch = await bcrypt.compare(
+          credentials!.password,
+          user.password
+        );
         if (!isMatch) return null;
 
         return {
@@ -54,7 +46,6 @@ export const authOptions = {
 
   callbacks: {
     async signIn({ user, account }) {
-      // Google login handler
       if (account?.provider === "google") {
         await connectToDB();
 
@@ -72,12 +63,10 @@ export const authOptions = {
         user.id = existing._id.toString();
         user.publicId = existing.publicId;
       }
-
       return true;
     },
 
     async jwt({ token, user }) {
-      // When user logs in for the first time
       if (user) {
         token.id = user.id;
         token.name = user.name;
@@ -89,7 +78,6 @@ export const authOptions = {
     },
 
     async session({ session, token }) {
-      // Shape the frontend session
       session.user = {
         id: token.id,
         name: token.name,
@@ -101,6 +89,3 @@ export const authOptions = {
     },
   },
 };
-
-const handler = NextAuth(authOptions);
-export { handler as GET, handler as POST };

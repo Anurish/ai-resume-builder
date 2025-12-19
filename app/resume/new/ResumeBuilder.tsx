@@ -151,19 +151,25 @@ export default function ResumeBuilder() {
   /* ==============================
      SAVE & PREVIEW
 ================================ */
-  async function goToPreview() {
-    await fetch("/api/save-resume", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email: session.user.email,
-        resumeData: formData,
-        resumeTemplate: selectedTemplate,
-      }),
-    });
-
-    router.push("/resume/preview");
+async function goToPreview() {
+  if (!session?.user?.email) {
+    alert("You must be logged in");
+    return;
   }
+
+  await fetch("/api/save-resume", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      email: session.user.email, // ✅ now safe
+      resumeData: formData,
+      resumeTemplate: selectedTemplate,
+    }),
+  });
+
+  router.push("/resume/preview");
+}
+
 
   /* ==============================
      UI

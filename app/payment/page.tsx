@@ -9,15 +9,15 @@ export default function PaymentPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
 
-  // Redirect if not logged in
   useEffect(() => {
     if (status === "loading") return;
     if (!session?.user?.email) router.push("/login");
   }, [session, status, router]);
 
   const startPayment = async () => {
-    // ✅ Type-safe guard (REQUIRED)
-    if (!session?.user?.email) return;
+    // ✅ FINAL GUARANTEE (TypeScript satisfied)
+    const email = session?.user?.email;
+    if (!email) return;
 
     const order = await fetch("/api/create-order", {
       method: "POST",
@@ -35,14 +35,14 @@ export default function PaymentPage() {
         await fetch("/api/upgrade-plan", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: session.user.email }),
+          body: JSON.stringify({ email }),
         });
 
         router.push("/resume/preview?upgraded=true");
       },
 
       prefill: {
-        email: session.user.email,
+        email,
       },
 
       theme: {
@@ -55,7 +55,6 @@ export default function PaymentPage() {
     razor.open();
   };
 
-  // Optional loading state
   if (status === "loading") return null;
 
   return (
@@ -70,7 +69,6 @@ export default function PaymentPage() {
         Pay ₹1 via UPI (Google Pay / Paytm / PhonePe)
       </button>
 
-      {/* ✅ Correct way to load Razorpay */}
       <Script
         src="https://checkout.razorpay.com/v1/checkout.js"
         strategy="afterInteractive"
